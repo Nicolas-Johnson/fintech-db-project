@@ -3,6 +3,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model AccountType {
   id       Int        @id @default(autoincrement())
   tipe     String     @db.VarChar(45)
@@ -40,7 +44,7 @@ model Customer {
   updatedAt     DateTime     @default(now()) @db.Timestamp(0)
   managers      Manager     @relation(fields: [acountManager], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_managers")
   accounttypes  AccountType @relation(fields: [acountType], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_acountTypes")
-  agencies      Agencie     @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_agencies")
+  agencies      Agency     @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_agencies")
 
   @@index([acountType], map: "FK_customer_acountTypes")
   @@index([agency], map: "FK_customer_agencies")
@@ -52,7 +56,7 @@ model CustomersByAgency {
   id             Int      @id @default(autoincrement())
   agency         Int
   customerAmount Int
-  agencies       Agencie @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_cutomerByAgency_agencies")
+  agencies       Agency @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_cutomerByAgency_agencies")
 
   @@index([agency], map: "FK_cutomerByAgency_agencies")
   @@map("customersbyagency")
@@ -61,7 +65,7 @@ model CustomersByAgency {
 model District {
   id       Int        @id @default(autoincrement())
   name     String     @db.VarChar(45)
-  agencies Agencie[]
+  agencies Agency[]
 
   @@map("district")
 }
@@ -90,7 +94,7 @@ model EmployeesByAgency {
   id       Int      @id @default(autoincrement())
   agency   Int
   employee Int
-  agencies Agencie @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employeesByAgency_agencies")
+  agencies Agency @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employeesByAgency_agencies")
 
   @@index([agency], map: "FK_employeesByAgency_agencies")
   @@map("employeesbyagency")
@@ -102,7 +106,7 @@ model Manager {
   lastName       String     @db.VarChar(45)
   employeeNumber Int
   employees      Employee  @relation(fields: [employeeNumber], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_managers_employees")
-  agencies       Agencie[]
+  agencies       Agency[]
   customer       Customer[]
 
   @@index([employeeNumber], map: "FK_managers_employees")
