@@ -1,0 +1,131 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model AccountType {
+  id       Int        @id @default(autoincrement())
+  tipe     String     @db.VarChar(45)
+  customer Customer[]
+
+  @@map("accounttypes")
+}
+
+model Agency {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(45)
+  districtId        Int
+  managerId         Int
+  district          District            @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_agencies_district")
+  managers          Manager            @relation(fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_agenciess_managers")
+  customer          Customer[]
+  customersbyagency CustomersByAgency[]
+  employeesbyagency EmployeesByAgency[]
+
+  @@index([districtId], map: "FK_agencies_district")
+  @@index([managerId], map: "FK_agenciess_managers")
+  @@map("agencies")
+}
+
+model Customer {
+  id            Int          @id @default(autoincrement())
+  name          String       @db.VarChar(45)
+  lastName      String       @db.VarChar(45)
+  birthDate     DateTime     @db.Date
+  cpf           String       @db.Char(11)
+  acountType    Int
+  acountManager Int
+  agency        Int
+  customerSince DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime     @default(now()) @db.Timestamp(0)
+  managers      Manager     @relation(fields: [acountManager], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_managers")
+  accounttypes  AccountType @relation(fields: [acountType], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_acountTypes")
+  agencies      Agencie     @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_customer_agencies")
+
+  @@index([acountType], map: "FK_customer_acountTypes")
+  @@index([agency], map: "FK_customer_agencies")
+  @@index([acountManager], map: "FK_customer_managers")
+  @@map("customer")
+}
+
+model CustomersByAgency {
+  id             Int      @id @default(autoincrement())
+  agency         Int
+  customerAmount Int
+  agencies       Agencie @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_cutomerByAgency_agencies")
+
+  @@index([agency], map: "FK_cutomerByAgency_agencies")
+  @@map("customersbyagency")
+}
+
+model District {
+  id       Int        @id @default(autoincrement())
+  name     String     @db.VarChar(45)
+  agencies Agencie[]
+
+  @@map("district")
+}
+
+model Employee {
+  id            Int        @id @default(autoincrement())
+  name          String     @db.VarChar(45)
+  lastName      String     @db.VarChar(45)
+  cpf           String     @db.Char(11)
+  email         String?    @db.VarChar(45)
+  admitedSince  DateTime   @default(now()) @db.Timestamp(0)
+  dismissalDate DateTime?  @db.Timestamp(0)
+  wage          Decimal    @db.Decimal(10, 2)
+  rule          Int
+  timeTable     Int
+  rules         Rule      @relation(fields: [rule], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employees_rules")
+  timetable     TimeTable  @relation(fields: [timeTable], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employees_timeTable")
+  managers      Manager[]
+
+  @@index([rule], map: "FK_employees_rules")
+  @@index([timeTable], map: "FK_employees_timeTable")
+  @@map("employees")
+}
+
+model EmployeesByAgency {
+  id       Int      @id @default(autoincrement())
+  agency   Int
+  employee Int
+  agencies Agencie @relation(fields: [agency], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employeesByAgency_agencies")
+
+  @@index([agency], map: "FK_employeesByAgency_agencies")
+  @@map("employeesbyagency")
+}
+
+model Manager {
+  id             Int        @id @default(autoincrement())
+  name           String     @db.VarChar(45)
+  lastName       String     @db.VarChar(45)
+  employeeNumber Int
+  employees      Employee  @relation(fields: [employeeNumber], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_managers_employees")
+  agencies       Agencie[]
+  customer       Customer[]
+
+  @@index([employeeNumber], map: "FK_managers_employees")
+  @@map("managers")
+}
+
+model Rule {
+  id        Int         @id @default(autoincrement())
+  cargo     String      @db.VarChar(45)
+  employees Employee[]
+  @@map("rules")
+}
+
+model Service {
+  id      Int    @id @default(autoincrement())
+  service String @db.VarChar(45)
+  @@map("services")
+}
+
+model TimeTable {
+  id        Int         @id @default(autoincrement())
+  tipe      String      @db.VarChar(45)
+  time      String      @db.VarChar(45)
+  employees Employee[]
+  @@map("timetable")
+}
