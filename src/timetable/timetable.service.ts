@@ -68,7 +68,7 @@ export class TimetableService {
     await this.getOne(id);
     return this.db.timeTable.delete({
       where: {
-        id,
+        id: Number(id),
       },
     });
   }

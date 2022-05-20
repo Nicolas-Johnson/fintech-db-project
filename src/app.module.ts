@@ -5,9 +5,18 @@ import { RulesModule } from './rules/rules.module';
 import { TimetableModule } from './timetable/timetable.module';
 import { ServicesModule } from './services/services.module';
 import { DistrictModule } from './district/district.module';
+import { ManagersModule } from './managers/managers.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [RulesModule, TimetableModule, ServicesModule, DistrictModule],
+  imports: [
+    RulesModule,
+    TimetableModule,
+    ServicesModule,
+    DistrictModule,
+    ManagersModule,
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
