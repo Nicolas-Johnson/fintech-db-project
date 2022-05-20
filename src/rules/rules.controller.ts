@@ -4,12 +4,9 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateRulesDto } from './dto/rules.create.dto';
-import { UpdateRulesDto } from './dto/rules.update.dto';
 import { RulesService } from './rules.service';
 
 @Controller('rules')
