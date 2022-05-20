@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty({
@@ -21,8 +27,11 @@ export class CreateUserDto {
     message: 'Campo SENHA é obrigatorio!',
   })
   @MinLength(8, {
-    message: ' a senha deve conter no minimo 8 caracteres',
+    message: 'A senha deve conter no minimo 8 caracteres',
   })
-  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%])/)
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%])/, {
+    message:
+      'A senha deve ter uma letra minuscula, uma letra maiuscula um numero de 0 a 9 e um caractere especial (@#$%).',
+  })
   password: string;
 }

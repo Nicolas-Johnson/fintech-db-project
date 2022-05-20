@@ -7,6 +7,16 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private db: DataBaseService) {}
 
+  async getByEmail(email: string) {
+    const user = await this.db.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    return user;
+  }
+
   async create({ name, email, password }: CreateUserDto) {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
