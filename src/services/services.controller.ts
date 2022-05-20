@@ -16,7 +16,7 @@ export class ServicesController {
   constructor(private servicesService: ServicesService) {}
 
   @Get()
-  red() {
+  read() {
     return this.servicesService.list();
   }
 
