@@ -8,6 +8,7 @@ import { DistrictModule } from './district/district.module';
 import { ManagersModule } from './managers/managers.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { EmployeesModule } from './employees/employees.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     ManagersModule,
     UsersModule,
     AuthModule,
+    EmployeesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
